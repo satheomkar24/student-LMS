@@ -17,7 +17,7 @@ const SubSectionTitle = ({
   return (
     <div className={className}>
       {name && (
-        <h5 className="primary-blue fw-bold d-flex gap-2 align-items-center justify-content-center">
+        <h5 className="primary-blue fw-bold ">
           {Icon && <Icon />} {name}
         </h5>
       )}

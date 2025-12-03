@@ -4,6 +4,7 @@
 :root {
   --orange: #f37739;
   --blue: #066ccb;
+  --dark-blue: #004e97;
   --main-bg-color: #e8f2fd;
   --font-family: "Inter", sans-serif;
 }
@@ -23,10 +24,34 @@ body {
 .bg-primary-blue {
   background-color: var(--blue);
 }
+.bg-primary-main {
+  background-color: var(--main-bg-color);
+}
 a {
   text-decoration: none;
 }
 
 p {
   color: #686868;
+}
+
+.custom-link {
+  font-weight: 600;
+  padding: 14px 30px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.custom-link.primary {
+  background-color: var(--blue);
+  color: white;
+}
+
+.custom-link.secondary {
+  color: var(--blue);
+  background-color: white;
+}
+
+.custom-link:hover {
+  background-color: var(--dark-blue);
+  color: white;
 }

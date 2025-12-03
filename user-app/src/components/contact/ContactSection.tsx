@@ -3,6 +3,7 @@ import SubSectionTitle from "../../reusables/SubSectionTitle";
 import { FiBook, FiMail, FiMap, FiPhone } from "react-icons/fi";
 import InfoCard from "./InfoCard";
 import Certificate from "./Certificate";
+import ContactForm from "./ContactForm";
 
 const ContactSection = () => {
   const contactInfo = [
@@ -57,6 +58,7 @@ const ContactSection = () => {
           </Row>
         </div>
       </section>
+      <ContactForm />
       <Certificate />
     </>
   );
