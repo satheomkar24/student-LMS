@@ -1,4 +1,5 @@
 import { FiHome } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 
 interface ISectionHeading {
@@ -11,10 +12,10 @@ const SectionHeading = ({ name }: ISectionHeading) => {
       <div className="container h-100 d-flex align-items-center justify-content-center flex-column">
         <h1>{name}</h1>
         <Breadcrumb listTag="div">
-          <BreadcrumbItem href="/" tag={"a"}>
-            <span className="d-flex align-items-center gap-1">
+          <BreadcrumbItem>
+            <Link to="/" className="d-flex align-items-center gap-1">
               <FiHome /> Home
-            </span>
+            </Link>
           </BreadcrumbItem>
           <BreadcrumbItem active className="primary-orange">
             {name}
