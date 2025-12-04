@@ -20,14 +20,18 @@ const CustomLink = ({
     if (tag === "button") {
       return (
         <Button onClick={onClick} className={`custom-link border-0 ${variant}`}>
-          {text} <FiArrowUpRight size={20} />
+          <span>
+            {text} <FiArrowUpRight size={20} />
+          </span>
         </Button>
       );
     }
     if (tag === "a") {
       return (
         <Link to={href} className={`custom-link ${variant}`}>
-          {text} <FiArrowUpRight size={20} />
+          <span style={{ lineHeight: "60px" }}>
+            {text} <FiArrowUpRight size={20} />
+          </span>
         </Link>
       );
     }

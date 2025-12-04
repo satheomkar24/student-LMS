@@ -8,7 +8,8 @@ const Certificate = () => {
         <Col lg={6}>
           <h5 className="fw-bold mb-3">Get Certificate</h5>
           <h1 className="fw-bold mb-5">
-            Get Quality Skills Certificate From the EduAll
+            Get Quality Skills Certificate From the{" "}
+            <span className="primary-orange">Spark</span>
           </h1>
           <CustomLink
             href="/contact"
