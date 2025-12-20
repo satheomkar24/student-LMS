@@ -20,7 +20,7 @@ const ContactForm = () => {
             <div className="d-flex flex-column flex-sm-row gap-4">
               <div className="testimonial">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <img src="https://avatar.iran.liara.run/public" key={i} />
+                  <img src="/images/avtar.png" key={i} />
                 ))}
               </div>
               <div>

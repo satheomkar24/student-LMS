@@ -1,7 +1,13 @@
+import { Editor } from "@satheomkar24/common-types";
 import React from "react";
 
 const Home = () => {
-  return <div>Home Page</div>;
+  const [content, setContent] = React.useState("");
+  return (
+    <div>
+      <Editor content={content} setContent={setContent} />
+    </div>
+  );
 };
 
 export default Home;
