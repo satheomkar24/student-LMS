@@ -4,6 +4,7 @@
   background-color: #2c3e50;
   color: #ecf0f1;
   height: calc(100vh - 72px);
+  z-index: 1000;
   transition: all ease 0.2s;
 }
 

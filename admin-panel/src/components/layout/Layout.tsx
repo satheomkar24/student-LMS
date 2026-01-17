@@ -13,12 +13,12 @@ const Layout = () => {
           className="container-fluid p-0 overflow-hidden"
           style={{ height: "calc(100vh - 72px)" }}
         >
-          <Row className="g-0">
+          <Row className="g-0 h-100">
             <Col sm="auto">
               <Sidebar />
             </Col>
-            <Col>
-              <main className="p-lg-4 p-2  overflow-auto">
+            <Col className="h-100">
+              <main className="p-lg-4 p-2  overflow-auto h-100">
                 <Outlet />
               </main>
             </Col>

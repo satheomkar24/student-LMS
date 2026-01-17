@@ -5,17 +5,17 @@ import mongoose, {
   type Model,
 } from "mongoose";
 import bcrypt from "bcryptjs";
-import type { IStudent } from "@satheomkar24/common-types";
+import type { IAdmin } from "@satheomkar24/common-types";
 
 // Document type: includes fields + instance methods
-export interface IStudentMethods {
+export interface IAdminMethods {
   comparePassword(password: string): Promise<boolean>;
 }
 
-export type StudentDocument = HydratedDocument<IStudent, IStudentMethods>;
+export type AdminDocument = HydratedDocument<IAdmin, IAdminMethods>;
 
-// Schema: only fields (IStudent)
-const studentSchema = new Schema(
+// Schema: only fields (IAdmin)
+const adminSchema = new Schema(
   {
     name: { type: String, required: true },
 
@@ -38,24 +38,24 @@ const studentSchema = new Schema(
 );
 
 // Pre-save hook: hash password
-studentSchema.pre<StudentDocument>("save", async function () {
+adminSchema.pre<AdminDocument>("save", async function () {
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
 // Instance method: compare password
-studentSchema.methods.comparePassword = async function (
-  this: StudentDocument,
+adminSchema.methods.comparePassword = async function (
+  this: AdminDocument,
   newPassword: string
 ): Promise<boolean> {
-  console.log("📢[student.ts:52]: ", newPassword, this.password);
+  console.log("📢[admin.ts:52]: ", newPassword, this.password);
   return bcrypt.compare(newPassword, this.password);
 };
 
 // Model type
-export type StudentModel = Model<StudentDocument>;
+export type AdminModel = Model<AdminDocument>;
 
 // Export the model (check if already compiled)
-export const Student: StudentModel =
-  (mongoose.models.Student as StudentModel) ||
-  model<StudentDocument>("Student", studentSchema);
+export const Admin: AdminModel =
+  (mongoose.models.Admin as AdminModel) ||
+  model<AdminDocument>("Admin", adminSchema);

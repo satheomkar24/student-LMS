@@ -1,3 +1,4 @@
+import { logger } from "@utils/logger";
 import type { Request, Response, NextFunction } from "express";
 
 export class ErrorRes extends Error {
@@ -20,7 +21,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  console.error(err); // log error for debugging
+  logger.error(err.message, err); // log error for debugging
 
   res.status(err.status || 500).json({
     success: false,

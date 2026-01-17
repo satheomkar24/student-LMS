@@ -2,6 +2,15 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { lazy } from "react";
 import Home from "./pages/Home";
 import Layout from "./components/layout/Layout";
+import { AuthGuard } from "@satheomkar24/common-types";
+import Course from "./pages/course/Course";
+import EditCourse from "./pages/course/EditCourse";
+import AddCourse from "./pages/course/AddCourse";
+
+const Register = lazy(() => import("./pages/auth/Register"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 
 const NotFound = lazy(() =>
   import("@satheomkar24/common-types").then((module) => ({
@@ -12,7 +21,11 @@ const NotFound = lazy(() =>
 const routes = createBrowserRouter([
   {
     path: "/",
-    Component: Layout,
+    element: (
+      // <AuthGuard>
+      <Layout />
+      // </AuthGuard>
+    ),
     children: [
       {
         index: true,
@@ -23,12 +36,42 @@ const routes = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "contact",
-        element: <div>contact page</div>,
+        path: "courses",
+        children: [
+          {
+            index: true,
+            Component: Course,
+          },
+          {
+            path: "add",
+            Component: AddCourse,
+          },
+          {
+            path: "edit/:id",
+            Component: EditCourse,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "auth",
+    children: [
+      {
+        path: "register",
+        Component: Register,
       },
       {
-        path: "about",
-        element: <div>about page</div>,
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "forgot-password",
+        Component: ForgotPassword,
+      },
+      {
+        path: "reset-password/:token",
+        Component: ResetPassword,
       },
     ],
   },

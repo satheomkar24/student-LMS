@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { FiUser } from "react-icons/fi";
+import { FiAward, FiBookOpen, FiMonitor, FiUsers } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 import { SidebarContext } from "../../context/SidebarContext";
@@ -27,14 +27,24 @@ const Sidebar = () => {
 
   const navItems = [
     {
-      url: "/about",
-      label: "About",
-      Icon: FiUser,
+      url: "/courses",
+      label: "Courses",
+      Icon: FiBookOpen,
     },
     {
-      url: "/contact",
-      label: "Contact",
-      Icon: FiUser,
+      url: "/instructors",
+      label: "Instructors",
+      Icon: FiAward,
+    },
+    {
+      url: "/students",
+      label: "Students",
+      Icon: FiUsers,
+    },
+    {
+      url: "/admins",
+      label: "Admins",
+      Icon: FiMonitor,
     },
   ];
 

@@ -20,7 +20,7 @@ class AuthService {
     this.dispatch = dispatch;
   }
 
-  private base = "/auth/students";
+  private base = "/auth/admins";
 
   async register(data: IRegisterPayload) {
     return await apiService.post<IGenericResponse>(

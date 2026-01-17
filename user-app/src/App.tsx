@@ -8,32 +8,7 @@ const App = () => {
 
   return (
     <>
-      <Toaster
-      // position="top-center"
-      // reverseOrder={false}
-      // gutter={8}
-      // containerClassName=""
-      // containerStyle={{}}
-      // toasterId="default"
-      // toastOptions={{
-      //   // Define default options
-      //   className: "",
-      //   duration: 2000,
-      //   style: {
-      //     background: "#363636",
-      //     color: "#fff",
-      //   },
-
-      //   // Default options for specific types
-      //   success: {
-      //     duration: 2000,
-      //     iconTheme: {
-      //       primary: "green",
-      //       secondary: "black",
-      //     },
-      //   },
-      // }}
-      />
+      <Toaster />
       <QueryClientProvider client={queryClient}>
         <SpinnerContextProvider>
           <RouterProvider router={routes} />

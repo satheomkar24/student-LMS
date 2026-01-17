@@ -1,9 +1,22 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
 import { env } from "./env";
 
+export type TokenPayload = {
+  id: string;
+};
+
 export const signToken = (
-  payload: object,
+  payload: TokenPayload,
   expiresIn: Exclude<SignOptions["expiresIn"], undefined>
 ) => jwt.sign(payload, env.JWT_SECRET, { expiresIn });
 
-export const verifyToken = (token: string) => jwt.verify(token, env.JWT_SECRET);
+export const verifyToken = (token: string): TokenPayload =>
+  jwt.verify(token, env.JWT_SECRET) as TokenPayload;
+
+export const signResetToken = (payload: TokenPayload) =>
+  jwt.sign(payload, env.PASSWORD_RESET_SECRET, {
+    expiresIn: env.PASSWORD_RESET_EXPIRES_IN,
+  });
+
+export const verifyResetToken = (token: string): TokenPayload =>
+  jwt.verify(token, env.PASSWORD_RESET_SECRET) as TokenPayload;

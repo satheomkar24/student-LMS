@@ -16,4 +16,12 @@ export const env = {
   JWT_SECRET: required("JWT_SECRET"),
   JWT_EXPIRES_IN: "15m" as const,
   REFRESH_TOKEN_EXPIRES_IN: "7d" as const,
+  PASSWORD_RESET_SECRET: required("PASSWORD_RESET_SECRET"),
+  PASSWORD_RESET_EXPIRES_IN: "15m" as const,
+  FRONTEND_USER_URL: required("FRONTEND_USER_URL"),
+  FRONTEND_ADMIN_URL: required("FRONTEND_ADMIN_URL"),
+  SMTP_HOST: required("SMTP_HOST"),
+  SMTP_PORT: required("SMTP_PORT"),
+  SMTP_USER: required("SMTP_USER"),
+  SMTP_PASS: required("SMTP_PASS"),
 };
