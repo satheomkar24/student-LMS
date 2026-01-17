@@ -18,6 +18,7 @@ import { StatusCodes } from "http-status-codes";
 import { sendEmail } from "@utils/email";
 import { logger } from "@utils/logger";
 import { Admin } from "@models/admin";
+import { ROLES } from "types";
 
 export class AdminAuthService {
   static async register(payload: IRegisterPayload): Promise<IGenericResponse> {
@@ -36,7 +37,7 @@ export class AdminAuthService {
 
   static async login(payload: ILogin): Promise<IAuthResponse> {
     const admin = await Admin.findOne({ email: payload.email }).select(
-      "+password"
+      "+password",
     );
     if (!admin)
       throw new ErrorRes("Invalid email or password", StatusCodes.BAD_REQUEST);
@@ -46,7 +47,11 @@ export class AdminAuthService {
       logger.warn(`Invalid password attempt for ${payload.email}`);
       throw new ErrorRes("Invalid email or password", StatusCodes.BAD_REQUEST);
     }
-    const jwtPayload = { id: admin._id.toString() };
+    const jwtPayload = {
+      id: admin._id.toString(),
+      role: ROLES.ADMIN,
+      email: admin.email,
+    };
     const accessToken = signToken(jwtPayload, env.JWT_EXPIRES_IN);
     const refreshToken = signToken(jwtPayload, env.REFRESH_TOKEN_EXPIRES_IN);
 
@@ -62,7 +67,7 @@ export class AdminAuthService {
   }
 
   static async forgotPassword(
-    payload: IForgotPassword
+    payload: IForgotPassword,
   ): Promise<IGenericResponse> {
     const admin = await Admin.findOne({ email: payload.email });
 
@@ -93,7 +98,7 @@ export class AdminAuthService {
   }
 
   static async resetPassword(
-    payload: IResetPasswordPayload
+    payload: IResetPasswordPayload,
   ): Promise<IGenericResponse> {
     let decoded: TokenPayload;
 
@@ -102,7 +107,7 @@ export class AdminAuthService {
     } catch {
       throw new ErrorRes(
         "Token is invalid or expired",
-        StatusCodes.BAD_REQUEST
+        StatusCodes.BAD_REQUEST,
       );
     }
 
