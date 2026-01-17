@@ -1,13 +1,16 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
 import { env } from "./env";
+import type { Role } from "types";
 
 export type TokenPayload = {
   id: string;
+  role?: Role;
+  email?: string;
 };
 
 export const signToken = (
   payload: TokenPayload,
-  expiresIn: Exclude<SignOptions["expiresIn"], undefined>
+  expiresIn: Exclude<SignOptions["expiresIn"], undefined>,
 ) => jwt.sign(payload, env.JWT_SECRET, { expiresIn });
 
 export const verifyToken = (token: string): TokenPayload =>

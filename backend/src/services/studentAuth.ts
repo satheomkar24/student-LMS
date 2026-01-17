@@ -18,6 +18,7 @@ import { ErrorRes } from "@middlewares/error";
 import { StatusCodes } from "http-status-codes";
 import { sendEmail } from "@utils/email";
 import { logger } from "@utils/logger";
+import { ROLES } from "types";
 
 export class StudentAuthService {
   static async register(payload: IRegisterPayload): Promise<IGenericResponse> {
@@ -36,7 +37,7 @@ export class StudentAuthService {
 
   static async login(payload: ILogin): Promise<IAuthResponse> {
     const student = await Student.findOne({ email: payload.email }).select(
-      "+password"
+      "+password",
     );
     if (!student)
       throw new ErrorRes("Invalid email or password", StatusCodes.BAD_REQUEST);
@@ -46,7 +47,11 @@ export class StudentAuthService {
       logger.warn(`Invalid password attempt for ${payload.email}`);
       throw new ErrorRes("Invalid email or password", StatusCodes.BAD_REQUEST);
     }
-    const jwtPayload = { id: student._id.toString() };
+    const jwtPayload = {
+      id: student._id.toString(),
+      role: ROLES.USER,
+      email: student.email,
+    };
     const accessToken = signToken(jwtPayload, env.JWT_EXPIRES_IN);
     const refreshToken = signToken(jwtPayload, env.REFRESH_TOKEN_EXPIRES_IN);
 
@@ -62,7 +67,7 @@ export class StudentAuthService {
   }
 
   static async forgotPassword(
-    payload: IForgotPassword
+    payload: IForgotPassword,
   ): Promise<IGenericResponse> {
     const student = await Student.findOne({ email: payload.email });
 
@@ -93,7 +98,7 @@ export class StudentAuthService {
   }
 
   static async resetPassword(
-    payload: IResetPasswordPayload
+    payload: IResetPasswordPayload,
   ): Promise<IGenericResponse> {
     let decoded: TokenPayload;
 
@@ -102,7 +107,7 @@ export class StudentAuthService {
     } catch {
       throw new ErrorRes(
         "Token is invalid or expired",
-        StatusCodes.BAD_REQUEST
+        StatusCodes.BAD_REQUEST,
       );
     }
 
