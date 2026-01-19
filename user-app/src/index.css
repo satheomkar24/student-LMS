@@ -67,3 +67,24 @@ p {
 .form-control {
   box-shadow: none !important;
 }
+
+/* ============instructor============== */
+.ins-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--orange);
+  color: var(--blue);
+  transition: all 0.3s ease;
+}
+.ins-icon:hover {
+  background-color: var(--orange);
+  color: #fff;
+}
+.socialLink {
+  border-radius: 50%;
+}
+/* ============instructor============== */

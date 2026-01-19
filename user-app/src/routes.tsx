@@ -4,6 +4,9 @@ import Contact from "./pages/Contact";
 import Layout from "./components/layout/Layout";
 import { lazy } from "react";
 import Home from "./pages/Home";
+import Instructor from "./pages/instructor/Instructor";
+import InstructorInfo from "./pages/instructor/InstructorInfo";
+import Course from "./pages/course/Course";
 
 const Register = lazy(() => import("./pages/auth/Register"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -13,7 +16,7 @@ const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const NotFound = lazy(() =>
   import("@satheomkar24/common-types").then((module) => ({
     default: module.NotFound,
-  }))
+  })),
 );
 
 const routes = createBrowserRouter([
@@ -36,6 +39,32 @@ const routes = createBrowserRouter([
       {
         path: "contact",
         Component: Contact,
+      },
+      {
+        path: "courses",
+        children: [
+          {
+            index: true,
+            Component: Course,
+          },
+          {
+            path: "details/:id",
+            element: <h4>Not Implemented</h4>,
+          },
+        ],
+      },
+      {
+        path: "instructors",
+        children: [
+          {
+            index: true,
+            Component: Instructor,
+          },
+          {
+            path: "details/:id",
+            Component: InstructorInfo,
+          },
+        ],
       },
     ],
   },
