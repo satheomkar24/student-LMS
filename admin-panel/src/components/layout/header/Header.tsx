@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiAlignJustify, FiLogOut, FiUser } from "react-icons/fi";
 import {
   Navbar,
   Nav,
@@ -10,13 +10,35 @@ import {
 } from "reactstrap";
 import Logo from "../Logo";
 import { SidebarContext } from "../../../context/SidebarContext";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import useAdminResolver from "../../../resolvers/AdminResolver";
+import { Link, useNavigate } from "react-router-dom";
+import { authService } from "../../../services/authService";
+import { CustomSwal } from "@satheomkar24/common-types";
 
 const Header = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  const { adminById } = useAdminResolver({ adminId: user?.id });
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  authService.init(navigate, dispatch);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const { setShow } = useContext(SidebarContext);
+
+  const handleLogout = async () => {
+    const result = await CustomSwal.fire({
+      icon: "warning",
+      title: "Are you sure you want to logout?",
+      confirmButtonText: "Logout",
+    });
+    if (result.isConfirmed) {
+      authService.logout();
+    }
+  };
 
   return (
     <>
@@ -38,11 +60,27 @@ const Header = () => {
                 tag="span"
                 className="cursor-pointer"
               >
-                <img src="/images/avtar.png" width={40} />
+                <img
+                  src={adminById?.image || "/images/avtar.png"}
+                  width={40}
+                  height={40}
+                  className="rounded-circle bg-warning object-fit-cover"
+                />
               </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem header>Header</DropdownItem>
-                <DropdownItem>Some Action</DropdownItem>
+                <DropdownItem
+                  className="d-flex align-items-center border-bottom"
+                  tag={Link}
+                  to="/profile"
+                >
+                  <FiUser className="primary-orange me-2 fs-5" /> My Profile
+                </DropdownItem>
+                <DropdownItem
+                  className="d-flex align-items-center"
+                  onClick={handleLogout}
+                >
+                  <FiLogOut className="primary-orange me-2 fs-5" /> Logout
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </Nav>

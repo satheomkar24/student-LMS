@@ -1,6 +1,6 @@
-export const ROLES = {
-  ADMIN: "admin",
-  USER: "user",
-} as const;
+import type { ROLES } from "@enums/index";
+
+export * from "./model/course";
+export * from "./order";
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];

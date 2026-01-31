@@ -18,7 +18,7 @@ import { ErrorRes } from "@middlewares/error";
 import { StatusCodes } from "http-status-codes";
 import { sendEmail } from "@utils/email";
 import { logger } from "@utils/logger";
-import { ROLES } from "types";
+import { ROLES } from "@enums/index";
 
 export class StudentAuthService {
   static async register(payload: IRegisterPayload): Promise<IGenericResponse> {
@@ -77,7 +77,11 @@ export class StudentAuthService {
       };
     }
 
-    const resetToken = signResetToken({ id: student._id.toString() });
+    const resetToken = signResetToken({
+      id: student._id.toString(),
+      role: ROLES.USER,
+      email: student.email,
+    });
 
     const resetUrl = `${env.FRONTEND_USER_URL}/auth/reset-password/${resetToken}`;
 

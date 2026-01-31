@@ -24,4 +24,6 @@ export const env = {
   SMTP_PORT: required("SMTP_PORT"),
   SMTP_USER: required("SMTP_USER"),
   SMTP_PASS: required("SMTP_PASS"),
+  RAZORPAY_KEY_ID: required("RAZORPAY_KEY_ID"),
+  RAZORPAY_KEY_SECRET: required("RAZORPAY_KEY_SECRET"),
 };

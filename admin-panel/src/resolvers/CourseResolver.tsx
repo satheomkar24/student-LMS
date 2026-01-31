@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
+  showError,
   SpinnerContext,
   type ICourse,
   type ICoursePayload,
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   courseId?: string;
 };
-const useCourseResolver = ({ courseId }: Props) => {
+const useCourseResolver = ({ courseId }: Props = {}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setIsLoading } = useContext(SpinnerContext);
@@ -25,7 +26,7 @@ const useCourseResolver = ({ courseId }: Props) => {
     data,
     isSuccess,
     isLoading: isCourseLoading,
-  } = useApiQuery<ICourse[]>(["courses"], coursesService.getAll);
+  } = useApiQuery<ICourse[]>(["courses"], () => coursesService.getAll());
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -34,27 +35,25 @@ const useCourseResolver = ({ courseId }: Props) => {
   }, [isSuccess, data, dispatch]);
 
   //  Fetch by ID
-  const { data: courseById } = useApiQuery<ICourse | undefined>(
-    ["course", courseId],
-    () => coursesService.getById(courseId!),
-    {
-      enabled: !!courseId,
-    }
-  );
+  const { data: courseById, isLoading: isCourseByIdLoading } = useApiQuery<
+    ICourse | undefined
+  >(["course", courseId], () => coursesService.getById(courseId!), {
+    enabled: !!courseId,
+  });
 
   // Mutation: create new
   const createCourseMutation = useApiMutation(
     (data: ICoursePayload) => coursesService.create(data),
     {
-      onSuccess: (data: ICourse) => {
+      onSuccess: () => {
         toast.success("Course added successfully");
-        navigate(`/courses/edit/${data._id}`);
+        navigate(`/courses`);
       },
-      onError: () => {
-        toast.error("Failed to add Course.");
+      onError: (error) => {
+        showError(error, "Failed to add Course.");
       },
       invalidateKeys: [["courses"]],
-    }
+    },
   );
 
   //  Mutation: update values
@@ -65,11 +64,11 @@ const useCourseResolver = ({ courseId }: Props) => {
       onSuccess: () => {
         toast.success("Course updated successfully");
       },
-      onError: () => {
-        toast.error("Failed to update course");
+      onError: (error) => {
+        showError(error, "Failed to update course");
       },
-      invalidateKeys: [["courses"]],
-    }
+      invalidateKeys: [["courses"], ["instructors"]],
+    },
   );
 
   //  Mutation: delete values
@@ -79,11 +78,11 @@ const useCourseResolver = ({ courseId }: Props) => {
       onSuccess: () => {
         toast.success("Course deleted successfully");
       },
-      onError: () => {
-        toast.error("Failed to delete course");
+      onError: (error) => {
+        showError(error, "Failed to delete course");
       },
       invalidateKeys: [["courses"]],
-    }
+    },
   );
 
   //  Set loading spinner based on mutation state
@@ -92,7 +91,7 @@ const useCourseResolver = ({ courseId }: Props) => {
       isCourseLoading ||
         createCourseMutation.isPending ||
         updateCourseMutation.isPending ||
-        deleteCourseMutation.isPending
+        deleteCourseMutation.isPending,
     );
   }, [
     isCourseLoading,
@@ -105,6 +104,7 @@ const useCourseResolver = ({ courseId }: Props) => {
   return {
     courses,
     courseById,
+    isCourseByIdLoading,
     createCourseMutation,
     updateCourseMutation,
     deleteCourseMutation,

@@ -12,7 +12,11 @@ export interface IAdminMethods {
   comparePassword(password: string): Promise<boolean>;
 }
 
-export type AdminDocument = HydratedDocument<IAdmin, IAdminMethods>;
+type IAdminDoc = Omit<IAdmin, "_id"> & {
+  _id: mongoose.Types.ObjectId;
+};
+
+export type AdminDocument = HydratedDocument<IAdminDoc, IAdminMethods>;
 
 // Schema: only fields (IAdmin)
 const adminSchema = new Schema(
@@ -34,7 +38,7 @@ const adminSchema = new Schema(
       select: false, // exclude by default
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Pre-save hook: hash password
@@ -46,7 +50,7 @@ adminSchema.pre<AdminDocument>("save", async function () {
 // Instance method: compare password
 adminSchema.methods.comparePassword = async function (
   this: AdminDocument,
-  newPassword: string
+  newPassword: string,
 ): Promise<boolean> {
   console.log("📢[admin.ts:52]: ", newPassword, this.password);
   return bcrypt.compare(newPassword, this.password);

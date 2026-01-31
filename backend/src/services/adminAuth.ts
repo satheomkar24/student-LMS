@@ -18,7 +18,7 @@ import { StatusCodes } from "http-status-codes";
 import { sendEmail } from "@utils/email";
 import { logger } from "@utils/logger";
 import { Admin } from "@models/admin";
-import { ROLES } from "types";
+import { ROLES } from "@enums/index";
 
 export class AdminAuthService {
   static async register(payload: IRegisterPayload): Promise<IGenericResponse> {
@@ -77,7 +77,11 @@ export class AdminAuthService {
       };
     }
 
-    const resetToken = signResetToken({ id: admin._id.toString() });
+    const resetToken = signResetToken({
+      id: admin._id.toString(),
+      role: ROLES.ADMIN,
+      email: admin.email,
+    });
 
     const resetUrl = `${env.FRONTEND_USER_URL}/auth/reset-password/${resetToken}`;
 

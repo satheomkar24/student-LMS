@@ -8,11 +8,15 @@ import { FieldArray, Formik, type FormikHelpers, Form } from "formik";
 import { FiSave } from "react-icons/fi";
 import { Button, Card, CardBody, CardHeader } from "reactstrap";
 import * as Yup from "yup";
+import useInstructorResolver from "../../resolvers/InstructorResolver";
 
 type Props = {
   initialValues: ICoursePayload;
+  onSubmit: (values: ICoursePayload) => Promise<void>;
 };
-const CourseForm = ({ initialValues }: Props) => {
+const CourseForm = ({ initialValues, onSubmit }: Props) => {
+  const { instructors } = useInstructorResolver();
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     image: Yup.string().required("Image link is required"),
@@ -27,16 +31,21 @@ const CourseForm = ({ initialValues }: Props) => {
         name: Yup.string().required("Name is required"),
         video: Yup.string().required("Video link is required"),
         duration: Yup.string(),
-      })
+      }),
     ),
     faqs: Yup.array().of(
       Yup.object({
         question: Yup.string().required("Question is required"),
         answer: Yup.string().required("Answer is required"),
-      })
+      }),
     ),
     publish: Yup.boolean(),
   });
+
+  const instructorFieldOption = instructors.map((instructor) => ({
+    label: instructor.name,
+    value: instructor._id,
+  }));
 
   const levelFieldOption = [
     { label: "Beginner", value: "Beginner" },
@@ -57,8 +66,8 @@ const CourseForm = ({ initialValues }: Props) => {
   ];
 
   const renderBasicInfoFields = (
-    value: ICoursePayload,
-    setFieldValue: FormikHelpers<ICoursePayload>["setFieldValue"]
+    value: Partial<ICoursePayload>,
+    setFieldValue: FormikHelpers<ICoursePayload>["setFieldValue"],
   ): IFormRender[] => {
     const levelFieldValue =
       levelFieldOption.find((option) => option.value === value.level) || null;
@@ -66,6 +75,11 @@ const CourseForm = ({ initialValues }: Props) => {
     const categoryFieldValue =
       categoryFieldOption.find((option) => option.value === value.category) ||
       null;
+
+    const instructorFieldValue =
+      instructorFieldOption.find(
+        (option) => option.value === value.instructor,
+      ) || null;
 
     return [
       {
@@ -151,8 +165,8 @@ const CourseForm = ({ initialValues }: Props) => {
           label: "Instructor",
           onSelectChange: (value) =>
             setFieldValue("instructor", value?.[0]?.value || ""),
-          options: [],
-          value: null,
+          options: instructorFieldOption,
+          value: instructorFieldValue,
         },
         colSize: "col-md-6",
       },
@@ -173,9 +187,7 @@ const CourseForm = ({ initialValues }: Props) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log("Submitted FAQs:", values);
-        }}
+        onSubmit={onSubmit}
       >
         {({ values, submitForm, setFieldValue }) => (
           <Form>
@@ -190,7 +202,7 @@ const CourseForm = ({ initialValues }: Props) => {
               <CardHeader>Basic Information</CardHeader>
               <CardBody>
                 {renderFieldRowWithSizes(
-                  renderBasicInfoFields(values, setFieldValue)
+                  renderBasicInfoFields(values, setFieldValue),
                 )}
               </CardBody>
             </Card>
@@ -201,7 +213,7 @@ const CourseForm = ({ initialValues }: Props) => {
                 <FieldArray name="lessons">
                   {({ push, remove }) => (
                     <>
-                      {values.lessons.map((_, index) => (
+                      {values?.lessons?.map((_, index) => (
                         <div key={index} className="border p-3 mb-3 rounded">
                           {renderFormField({
                             id: `lessons.${index}.name`,
@@ -253,7 +265,7 @@ const CourseForm = ({ initialValues }: Props) => {
                 <FieldArray name="faqs">
                   {({ push, remove }) => (
                     <>
-                      {values.faqs.map((_, index) => (
+                      {values?.faqs?.map((_, index) => (
                         <div key={index} className="border p-3 mb-3 rounded">
                           {renderFormField({
                             id: `faqs.${index}.question`,

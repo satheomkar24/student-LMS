@@ -2,7 +2,7 @@ import type { ICourse, ICoursePayload } from "@satheomkar24/common-types";
 import { apiService } from "./apiService";
 
 class CourseService {
-  private base = "/auth/courses";
+  private base = "/courses";
 
   async getAll() {
     return await apiService.get<ICourse[]>(this.base);

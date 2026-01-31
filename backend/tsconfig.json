@@ -40,8 +40,10 @@
     "paths": {
       "@config/*": ["config/*"],
       "@controllers/*": ["controllers/*"],
+      "@enums/*": ["enums/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
+      "@modules/*": ["modules/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"]

@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Instructor from "./pages/instructor/Instructor";
 import InstructorInfo from "./pages/instructor/InstructorInfo";
 import Course from "./pages/course/Course";
+import CourseInfo from "./pages/course/CourseInfo";
 
 const Register = lazy(() => import("./pages/auth/Register"));
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -49,7 +50,7 @@ const routes = createBrowserRouter([
           },
           {
             path: "details/:id",
-            element: <h4>Not Implemented</h4>,
+            Component: CourseInfo,
           },
         ],
       },

@@ -4,8 +4,8 @@ import type { Role } from "types";
 
 export type TokenPayload = {
   id: string;
-  role?: Role;
-  email?: string;
+  role: Role;
+  email: string;
 };
 
 export const signToken = (
