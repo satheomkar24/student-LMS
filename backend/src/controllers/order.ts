@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import { Assert } from "@utils/assert";
 import { asyncHandler } from "@middlewares/error";
 import { StatusCodes } from "http-status-codes";
-import type { IGenericResponse } from "@satheomkar24/common-types";
 
 export class OrderController {
   static createOrder = asyncHandler(async (req: Request, res: Response) => {

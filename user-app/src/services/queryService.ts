@@ -19,7 +19,7 @@ type ApiMutationOptions<TData, TVariables> = UseMutationOptions<
 export const useApiQuery = <T>(
   queryKey: readonly unknown[],
   queryFn: () => Promise<T>,
-  options?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn">,
 ) => {
   return useQuery({
     queryKey,
@@ -32,7 +32,7 @@ export const useApiQuery = <T>(
 // Generic Mutation Hook (generally used to post the data / when modifies data on the server )
 export const useApiMutation = <TData, TVariables>(
   mutationFn: (variables: TVariables) => Promise<TData>,
-  options?: ApiMutationOptions<TData, TVariables>
+  options?: ApiMutationOptions<TData, TVariables>,
 ) => {
   const queryClient = useQueryClient();
 

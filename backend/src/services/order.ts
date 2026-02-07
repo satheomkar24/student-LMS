@@ -11,17 +11,16 @@ import { toObjectId } from "@utils/objectId";
 
 export class OrderService {
   static razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID!,
-    key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    key_id: env.RAZORPAY_KEY_ID!,
+    key_secret: env.RAZORPAY_KEY_SECRET!,
   });
 
   static async createOrder(userId: string, courseId: string) {
     console.log(this.razorpay);
-    console.log(process.env.RAZORPAY_KEY_ID);
-    console.log(process.env.RAZORPAY_KEY_SECRET);
+    console.log(env.RAZORPAY_KEY_ID);
+    console.log(env.RAZORPAY_KEY_SECRET);
     const course = await Course.findById(courseId).lean();
     Assert.entityFound(course, "Course");
-    console.log("📢[order.ts:23]: course: ", course);
 
     // Prevent duplicate purchase
     const exists = await Order.exists({
@@ -29,7 +28,6 @@ export class OrderService {
       course: courseId,
       status: ORDER_STATUS.PAID,
     });
-    console.log("📢[order.ts:28]: exists: ", exists);
 
     if (exists) {
       throw new ErrorRes("Course already purchased", StatusCodes.BAD_REQUEST);
@@ -41,21 +39,19 @@ export class OrderService {
       receipt: `order_${userId.slice(-6)}_${courseId.slice(-6)}`,
     });
 
-    console.log("📢[order.ts:39]: order: ", order);
-
     await Order.create({
       user: toObjectId(userId),
       course: courseId,
       orderId: order.id,
       amount: course.price,
-      status: "PENDING",
+      status: ORDER_STATUS.PENDING,
     });
     console.log("upto end");
     return {
       orderId: order.id,
       amount: order.amount,
       currency: order.currency,
-      key: process.env.RAZORPAY_KEY_ID,
+      key: env.RAZORPAY_KEY_ID,
     };
   }
 
@@ -67,7 +63,7 @@ export class OrderService {
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+      .createHmac("sha256", env.RAZORPAY_KEY_SECRET!)
       .update(body)
       .digest("hex");
 
@@ -92,7 +88,10 @@ export class OrderService {
   }
 
   static async cancelOrder(orderId: string) {
-    await Order.findOneAndUpdate({ orderId }, { status: "CANCELLED" });
+    await Order.findOneAndUpdate(
+      { orderId },
+      { status: ORDER_STATUS.CANCELLED },
+    );
   }
 
   static async hasPurchased(userId: string, courseId: string) {

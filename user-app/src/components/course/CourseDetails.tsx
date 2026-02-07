@@ -1,4 +1,4 @@
-import type { ICourse } from "@satheomkar24/common-types";
+import { showError, type ICourse } from "@satheomkar24/common-types";
 import { Button } from "reactstrap";
 import {
   orderService,
@@ -61,9 +61,9 @@ const CourseDetails = ({ course }: Props) => {
       });
 
       rzp.open();
-    } catch (err) {
-      console.error(err);
-      toast.error("Payment flow failed. Try again!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      showError(err, "Payment flow failed. Try again!");
     }
   };
 
